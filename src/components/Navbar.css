@@ -1,0 +1,39 @@
+.navbar-custom {
+  background-color: transparent !important; /* Make the navbar transparent */
+  border: none; /* Remove any border */
+  box-shadow: none; /* Remove any shadow */
+}
+
+.navbar-brand,
+.nav-link {
+  color: #000; /* Adjust text color as needed */
+}
+
+.navbar-brand:hover,
+.nav-link:hover {
+  color: #007bff; /* Optional: Change hover color */
+}
+.navbar-nav .nav-item {
+  margin-left: 10px; /* Add space between links */
+}
+
+.navbar-nav .nav-link:hover {
+  border-bottom: 2px solid #007bff; /* Border appears only on hover */
+  transition: border-bottom 0.2s ease-in-out; /* Smooth animation */
+}
+
+/* Remove the default focus outline */
+.navbar-toggler:focus {
+  outline: none;
+  box-shadow: none; /* Remove any default box-shadow */
+}
+
+/* Show border only on hover */
+.navbar-toggler {
+  border: none; /* No border by default */
+}
+
+.navbar-toggler:hover {
+  border: 2px solid #0000001e; /* Add a border color on hover */
+  box-shadow: none; /* Optional: remove any box-shadow */
+}
