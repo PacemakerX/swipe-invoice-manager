@@ -1,28 +1,45 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setMessage, setExtractedData } from '../store/actions'; 
 
 const FileUpload = () => {
-  const [file, setFile] = useState(null);
-  const [message, setMessage] = useState('');
+  const dispatch = useDispatch();
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (e) => {
     const uploadedFile = e.target.files[0];
+    setSelectedFile(uploadedFile);
     if (uploadedFile) {
-      setFile(uploadedFile);
-      setMessage(`File "${uploadedFile.name}" selected.`);
+      dispatch(setMessage(`File "${uploadedFile.name}" selected.`));
     } else {
-      setMessage('');
+      dispatch(setMessage('No file selected.'));
     }
   };
 
-  const handleFileUpload = () => {
-    if (file) {
-      // Simulate file upload
-      setMessage(`Uploading "${file.name}"...`);
-      setTimeout(() => {
-        setMessage(`"${file.name}" uploaded successfully!`);
-      }, 1500); // Simulate upload delay
-    } else {
-      setMessage('Please select a file to upload.');
+  const handleFileUpload = async () => {
+    if (!selectedFile) {
+      dispatch(setMessage('Please select a file first.'));
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      const response = await fetch('http://localhost:3001/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upload file');
+      }
+
+      const data = await response.json();
+      dispatch(setExtractedData(data.extractedData));
+      dispatch(setMessage('File uploaded and processed successfully.'));
+    } catch (error) {
+      dispatch(setMessage(`Error: ${error.message}`));
     }
   };
 
@@ -42,7 +59,6 @@ const FileUpload = () => {
       >
         Upload File
       </button>
-      {message && <div className="alert alert-info mt-3">{message}</div>}
     </div>
   );
 };
