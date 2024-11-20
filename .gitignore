@@ -2,6 +2,8 @@
 
 # dependencies
 /swipe-invoice-backend/node_modules
+/swipe-invoice-frontend/node_modules
+
 
 
 /swipe-invoice-backend/package-lock.json
