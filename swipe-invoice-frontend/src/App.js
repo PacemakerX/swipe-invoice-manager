@@ -3,6 +3,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Dashboard from "./components/Dashboard";
 import FileUpload from "./components/FileUpload"; // Import FileUpload component
 import Navbar from "./components/Navbar"; // Adjust path as needed
+import './App.css'; // Adjust path to match your project structure
+
 
 function App() {
   return (
