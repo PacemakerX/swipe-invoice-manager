@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+.card {
+  background-color: white; /* Initial background color */
+  border-radius: 15px;     /* Keep the rounded edges */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better look */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+}
+
+.card:hover {
+  background-color: #f1f1f1; /* Light gray color on hover */
+  transform: scale(1.02);    /* Slightly enlarge on hover (optional) */
+}
