@@ -12,6 +12,9 @@ const Tesseract = require("tesseract.js"); // OCR for images
 const { parse } = require("xlsx"); // For XLSX processing
 const csvParser = require("csv-parser"); // CSV parser
 
+const prompt =
+  "Extract the following fields from the uploaded file 1. Serial Number, 2. Customer Name, 3. Product Name, 4. Quantity, 5. Tax, 6. Total Amount, 7. Date Please return the data as JSON with keys: invoices, products, and customers.";
+
 dotenv.config(); // Load environment variables
 
 const app = express();
@@ -91,7 +94,7 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    console.log("Uploaded File Details:", file); // debugging purpose
+    // console.log("Uploaded File Details:", file); // debugging purpose
 
     let fileContent = "";
     const fileType = file.mimetype;
@@ -128,7 +131,7 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
           row.some((cell) => cell !== undefined && cell !== null && cell !== "")
         );
 
-      console.log("Filtered XLSX Rows:", rows); // Debugging log
+      // console.log("Filtered XLSX Rows:", rows); // Debugging log
 
       // Remove empty cells in each row
       fileContent = rows
@@ -153,7 +156,7 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
       return res.status(400).json({ message: "Unsupported file type" });
     }
 
-    console.log("Processed File Content:", fileContent); // debugging purpose
+    // console.log("Processed File Content:", fileContent); // debugging purpose
 
     const geminiApiUrl =
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
@@ -163,6 +166,9 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
         contents: [
           {
             parts: [
+              {
+                text: prompt,
+              },
               {
                 text: fileContent,
               },
@@ -213,53 +219,43 @@ async function extractTextFromImage(filePath) {
 }
 
 // Helper function to parse extracted data
-function parseExtractedData(data) {
-  const invoices = [];
-  const products = [];
-  const customers = [];
+function parseExtractedData(geminiResponse) {
+  // Check if the response contains the expected candidates
+  const candidates = geminiResponse.candidates || [];
 
-  if (!data.candidates || data.candidates.length === 0) {
-    throw new Error("Invalid response structure from Gemini API");
+  if (!candidates.length || !candidates[0]?.content?.parts) {
+    console.error("Gemini API Response does not contain expected data.");
+    return { invoices: [], products: [], customers: [] }; // Return empty data
   }
 
-  const text = data.candidates[0].content.parts[0].text;
-  if (!text) {
-    throw new Error("No content text found in the response");
+  try {
+    // Extract the text part
+    const textContent = candidates[0].content.parts[0]?.text || "";
+
+    // Clean the text content to remove code block markers and ensure valid JSON
+    const cleanJson = textContent
+      .replace(/^```json\s*/g, "") // Remove the opening code block
+      .replace(/\s*```$/g, "") // Remove the closing code block
+      .trim() // Trim any remaining spaces or newlines
+      .replace(/[^}]*$/, ""); // Remove any non-JSON content after the last closing brace
+
+    // Log the cleaned content to check
+    console.log("Cleaned JSON:", cleanJson);
+
+    // Parse the cleaned JSON
+    const parsedData = JSON.parse(cleanJson);
+
+    // Ensure the structure matches your expected output
+    return {
+      invoices: parsedData.invoices || [],
+      products: parsedData.products || [],
+      customers: parsedData.customers || [],
+    };
+  } catch (error) {
+    console.error("Error parsing Gemini API response:", error.message);
+    return { invoices: [], products: [], customers: [] }; // Return empty data in case of error
   }
-
-  console.log("Extracted Text from API:", text); // Debugging
-
-  // Example parsing logic for structured data
-  const lines = text.split("\n");
-  lines.forEach((line) => {
-    const parts = line.split(" ");
-    if (parts.length >= 6) {
-      invoices.push({
-        serialNumber: parts[0],
-        customerName: parts[1] + " " + parts[2],
-        productName: parts[3],
-        quantity: parseInt(parts[4], 10),
-        totalAmount: parseFloat(parts[5]),
-        date: parts[6],
-      });
-
-      products.push({
-        productName: parts[3],
-        quantity: parseInt(parts[4], 10),
-        unitPrice: parseFloat(parts[5]),
-        totalPrice: parseFloat(parts[6]),
-      });
-
-      customers.push({
-        customerName: parts[1] + " " + parts[2],
-        totalPurchaseAmount: parseFloat(parts[5]),
-      });
-    }
-  });
-
-  return { invoices, products, customers };
 }
-
 // Start the server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
