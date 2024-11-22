@@ -110,8 +110,9 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
       fileType ===
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ) {
-      const XLSX = require("xlsx"); // Require XLSX
+      const XLSX = require("xlsx"); // Ensure XLSX is required
 
+      // Read the workbook from the file
       const workbook = XLSX.readFile(file.path);
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
@@ -120,10 +121,27 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
         throw new Error("No valid sheet found in the Excel file.");
       }
 
-      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-      console.log("Parsed XLSX Rows:", rows); // debugging purpose
-      fileContent = rows.map((row) => row.join(" ")).join("\n");
+      // Convert the sheet to JSON and filter out empty rows
+      const rows = XLSX.utils
+        .sheet_to_json(sheet, { header: 1 })
+        .filter((row) =>
+          row.some((cell) => cell !== undefined && cell !== null && cell !== "")
+        );
+
+      console.log("Filtered XLSX Rows:", rows); // Debugging log
+
+      // Remove empty cells in each row
+      fileContent = rows
+        .map((row) =>
+          row
+            .filter(
+              (cell) => cell !== undefined && cell !== null && cell !== ""
+            )
+            .join(" ")
+        )
+        .join("\n");
     }
+
     // Handle PDF Files
     else if (fileType === "application/pdf") {
       fileContent = await extractTextFromPDF(file.path);
