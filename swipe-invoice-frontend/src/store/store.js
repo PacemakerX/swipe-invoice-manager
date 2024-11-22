@@ -1,9 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import rootReducer from './reducer'; // Your root reducer
+import { configureStore } from "@reduxjs/toolkit";
+import reducer from "./reducer"; // Path to your reducer.js
 
 const store = configureStore({
-  reducer: rootReducer,  // Your combined reducers
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware()  // Default middleware setup
+  reducer: {
+    data: reducer, // Key "data" matches how you're accessing it in FileUpload.js
+  },
 });
 
 export default store;
