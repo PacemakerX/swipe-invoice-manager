@@ -1,70 +1,41 @@
-# Getting Started with Create React App
+# Invoice Data Management App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A web application that automates the extraction, processing, and management of invoice data from various file formats, including Excel, PDF, and images. The app organizes extracted data into three main sections: Invoices, Products, and Customers. It uses React for the frontend, Redux for state management, and integrates AI-powered data extraction for all file types.## Badges
 
-## Available Scripts
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![GitHub issues](https://img.shields.io/github/issues/PacemakerX/swipe-invoice-manager.svg)](https://github.com/PacemakerX/swipe-invoice-manager/issues)
+[![GitHub stars](https://img.shields.io/github/stars/PacemakerX/swipe-invoice-manager.svg?style=social)](https://github.com/PacemakerX/swipe-invoice-manager/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/PacemakerX/swipe-invoice-manager.svg?style=social)](https://github.com/PacemakerX/swipe-invoice-manager/network/members)
+[![Node.js](https://img.shields.io/node/v/react.svg?style=flat)](https://nodejs.org/)
+[![React version](https://img.shields.io/badge/React-%3E%3D16.0-blue.svg)](https://reactjs.org/)
+[![Code Coverage](https://img.shields.io/codecov/c/github/PacemakerX/swipe-invoice-manager.svg)](https://codecov.io/gh/PacemakerX/swipe-invoice-manager)
+[![Last Commit](https://img.shields.io/github/last-commit/PacemakerX/swipe-invoice-manager.svg)](https://github.com/PacemakerX/swipe-invoice-manager/commits)
+[![React Native](https://img.shields.io/badge/React%20Native-%3E%3D0.64.0-blue.svg)](https://reactnative.dev/)
+[![npm version](https://img.shields.io/npm/v/npm.svg)](https://npmjs.com/package/npm)
+[![License](https://img.shields.io/github/license/PacemakerX/swipe-invoice-manager.svg)](https://github.com/PacemakerX/swipe-invoice-manager/blob/main/LICENSE)
 
-In the project directory, you can run:
+[![Build Status](https://img.shields.io/travis/PacemakerX/swipe-invoice-manager/master.svg)](https://travis-ci.com/github/PacemakerX/swipe-invoice-manager)
+[![Dependencies](https://img.shields.io/david/PacemakerX/swipe-invoice-manager.svg)](https://david-dm.org/PacemakerX/swipe-invoice-manager)
+[![Dev Dependencies](https://img.shields.io/david/dev/PacemakerX/swipe-invoice-manager.svg)](https://david-dm.org/PacemakerX/swipe-invoice-manager?type=dev)
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**Frontend**: React, Redux, Axios
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**Backend**: Node.js, Express
 
-### `npm test`
+**Data Extraction**: Tesseract.js, PDF.js
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Database** (Optional/Future Use): MongoDB, PostgreSQL
 
-### `npm run build`
+**OCR & AI Models**: Tesseract.js (for image and PDF text extraction), TensorFlow.js (for AI-based data processing, optional)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**vFile Formats Supported**: Excel (XLSX, XLS), PDF, Image (JPEG, PNG)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**Development Tools**: VS Code, Git, GitHub
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**Testing**: Jest (optional for future testing needs)
 
-### `npm run eject`
+**Containerization**: Docker (optional for deployment)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Cloud Storage**: AWS S3 (optional for file storage in future)
