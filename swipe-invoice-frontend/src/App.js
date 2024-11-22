@@ -13,12 +13,12 @@ function App() {
 
       <div className="container mt-4">
         <h1 className="text-center">Welcome to Swipe Invoice Manager</h1>
-        <p className="text-center">Select a feature to get started:</p>
 
         {/* Render Dashboard and FileUpload components */}
         <div className="mt-4">
           <FileUpload />
         </div>
+        <p className="text-center mt-4">Upload any file above and select a feature to get started:</p>
         <Dashboard />
       </div>
     </div>
