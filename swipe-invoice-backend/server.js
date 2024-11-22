@@ -106,10 +106,22 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
       fileContent = rows.map((row) => Object.values(row).join(" ")).join("\n");
     }
     // Handle XLSX Files
-    else if (fileType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
-      const workbook = parse(fs.readFileSync(file.path));
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const rows = parse(sheet, { header: 1 });
+    else if (
+      fileType ===
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ) {
+      const XLSX = require("xlsx"); // Require XLSX
+
+      const workbook = XLSX.readFile(file.path);
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+
+      if (!sheet) {
+        throw new Error("No valid sheet found in the Excel file.");
+      }
+
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      console.log("Parsed XLSX Rows:", rows); // debugging purpose
       fileContent = rows.map((row) => row.join(" ")).join("\n");
     }
     // Handle PDF Files
@@ -125,7 +137,6 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
 
     console.log("Processed File Content:", fileContent); // debugging purpose
 
-    // Send file content to Gemini API
     const geminiApiUrl =
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
     const response = await axios.post(
@@ -148,17 +159,21 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
       }
     );
 
-    console.log("Gemini API Full Response:", JSON.stringify(response.data, null, 2)); // debugging purpose
+    console.log(
+      "Gemini API Full Response:",
+      JSON.stringify(response.data, null, 2)
+    ); // debugging purpose
 
-    // Parse and structure the data
     const structuredData = parseExtractedData(response.data);
 
     res.json({ structuredData });
 
-    // Cleanup uploaded file
-    fs.unlinkSync(file.path);
+    fs.unlinkSync(file.path); // Cleanup uploaded file
   } catch (error) {
-    console.error("Error Processing File:", error.response?.data || error.message);
+    console.error(
+      "Error Processing File:",
+      error.response?.data || error.message
+    );
     res.status(500).json({
       message: "Error processing file",
       error: error.message,
