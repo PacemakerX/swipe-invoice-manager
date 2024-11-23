@@ -7,7 +7,7 @@
 /swipe-invoice-backend/package-lock.json
 /swipe-invoice-backend/uploads
 /swipe-invoice-backend/eng.traineddata
-
+/swipe-invoice-backend/.env
 
 #frontend 
 /swipe-invoice-frontend/node_modules
