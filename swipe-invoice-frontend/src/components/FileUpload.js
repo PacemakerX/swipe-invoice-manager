@@ -34,7 +34,7 @@ const FileUpload = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/upload",
+        "https://swipe-invoice-manager.onrender.com/api/upload",
         formData,
         {
           headers: {
